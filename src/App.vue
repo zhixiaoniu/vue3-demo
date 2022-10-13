@@ -8,6 +8,7 @@
     <div class="query-box">
       <el-input class="query-input" v-model="queryInput" placeholder="请输入姓名搜索" />
       <el-button type="primary" @click="handleAdd">增加</el-button>
+      <el-button type="danger" @click="handleDelList">删除多选</el-button>
     </div>
     <!-- table -->
     <el-table
@@ -24,10 +25,10 @@
       <el-table-column prop="state" label="状态" width="120" />
       <el-table-column prop="address" label="地址" width="300" />
       <el-table-column fixed="right" label="操作" width="120">
-        <template #default>
-          <el-button link type="danger" size="small" @click="handleRowClick"
-          >删除</el-button
-          >
+        <template #default="scope">
+          <el-button link type="danger" size="small" @click="handleRowDel(scope.row)">
+            删除
+          </el-button>
           <el-button link type="primary" size="small">编辑</el-button>
         </template>
       </el-table-column>
@@ -115,30 +116,49 @@ let tableForm = ref({
 let dialogTitle = ref('add')
 
 /* 方法 */
-const handleRowClick = () => {
-  console.log('click')
+//删除多条
+const handleDelList = () =>{
+  multipleSelection.value.forEach(id =>{
+    // console.log(item);
+    handleRowDel({id})
+  })
 }
 
+//删除一条 {id} 解构赋值
+const handleRowDel = ({id}) => {
+  //通过id获取相应的索引
+  let index = tableData.value.findIndex(item=>item.id === id)
+  //删除数据
+  tableData.value.splice(index,1)
+}
+
+//选中
 const handleSelectionChange = (val) => {
-  multipleSelection.value = val
-  console.log(val)
+  multipleSelection.value = []
+  val.forEach(item =>{
+    multipleSelection.value.push(item.id)
+  })
 }
 
+//添加新增
 const handleAdd = () =>{
   dialogFormVisible.value = true
   // console.log(tableForm)
   tableForm.value = {}
 }
 
+//添加确认
 const dialogConfirm = () =>{
   dialogFormVisible.value = false
   //1.拿到数据
   //2.添加数据
   tableData.value.push({
-    id:(tableData.length + 1).toString,
+    id:(tableData.value.length + 1).toString(),
     ...tableForm.value
   })
 }
+
+
 
 </script>
 
