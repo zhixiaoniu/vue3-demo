@@ -7,8 +7,10 @@
     <!-- query -->
     <div class="query-box">
       <el-input class="query-input" v-model="queryInput" placeholder="请输入姓名搜索" />
-      <el-button type="primary" @click="handleAdd">增加</el-button>
-      <el-button type="danger" @click="handleDelList">删除多选</el-button>
+      <div class="btn-list">
+        <el-button type="primary" @click="handleAdd">增加</el-button>
+        <el-button type="danger" @click="handleDelList" v-if="multipleSelection.length > 0">删除多选</el-button>
+      </div>
     </div>
     <!-- table -->
     <el-table
