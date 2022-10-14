@@ -31,7 +31,7 @@
           <el-button link type="danger" size="small" @click="handleRowDel(scope.row)">
             删除
           </el-button>
-          <el-button link type="primary" size="small">编辑</el-button>
+          <el-button link type="primary" size="small" @click="handleRowEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,10 +118,17 @@ let tableForm = ref({
 let dialogTitle = ref('add')
 
 /* 方法 */
+//编辑
+const handleRowEdit = (row) =>{
+  dialogFormVisible.value = true
+  dialogTitle.value = 'edit'
+  // tableForm.value = {...row}
+  tableForm.value = row
+
+}
 //删除多条
 const handleDelList = () =>{
   multipleSelection.value.forEach(id =>{
-    // console.log(item);
     handleRowDel({id})
   })
 }
@@ -145,19 +152,27 @@ const handleSelectionChange = (val) => {
 //添加新增
 const handleAdd = () =>{
   dialogFormVisible.value = true
-  // console.log(tableForm)
+  dialogTitle.value = 'add'
   tableForm.value = {}
 }
 
 //添加确认
 const dialogConfirm = () =>{
-  dialogFormVisible.value = false
-  //1.拿到数据
-  //2.添加数据
-  tableData.value.push({
-    id:(tableData.value.length + 1).toString(),
-    ...tableForm.value
-  })
+  if(dialogTitle.value === 'add'){
+    dialogFormVisible.value = false
+    //1.拿到数据
+    //2.添加数据
+    tableData.value.push({
+      id:(tableData.value.length + 1).toString(),
+      ...tableForm.value
+    })
+  }else{
+    dialogFormVisible.value = false
+    //获取当前数据的索引
+    let index = tableData.value.findIndex(item=>item.id === tableForm.value.id)
+    //替换当前索引的数据
+    tableData[index] = tableForm
+  }
 }
 
 
