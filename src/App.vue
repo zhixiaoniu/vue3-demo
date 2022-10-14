@@ -64,11 +64,8 @@
     </el-dialog>
   </div>
 </template>
-
 <script setup>
-
 import { ref } from "vue";
-
 /* 数据  */
 let queryInput = ref("")
 let tableData = ref([
@@ -117,7 +114,6 @@ let tableForm = ref({
   address:'广东省'
 })
 let dialogTitle = ref('add')
-
 /* 方法 */
 //搜索
 const handleQueryName = () =>{
@@ -164,6 +160,7 @@ const handleAdd = () =>{
 //添加确认
 const dialogConfirm = () =>{
   if(dialogTitle.value === 'add'){
+    //确认添加
     dialogFormVisible.value = false
     //1.拿到数据
     //2.添加数据
@@ -172,6 +169,7 @@ const dialogConfirm = () =>{
       ...tableForm.value
     })
   }else{
+    //确认编辑
     dialogFormVisible.value = false
     //获取当前数据的索引
     let index = tableData.value.findIndex(item=>item.id === tableForm.value.id)
